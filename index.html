@@ -478,7 +478,7 @@
   </div>
   <div class="info-item">
     <div class="label">Duration</div>
-    <div class="value">8 Nights</div>
+    <div class="value">9 Days / 8 Nights</div>
   </div>
   <div class="info-item">
     <div class="label">Transport</div>
@@ -543,28 +543,35 @@
 
   // ── Stops ──
   const stops = [
-    // Phase 1: Nürtingen base
-    { lat: 48.6266, lng: 9.3365, name: 'Nürtingen', day: 'Days 1–2', desc: 'Home base on the Neckar — old town, river walks, Hölderlin heritage', phase: 1, main: true },
-    { lat: 48.5553, lng: 9.3753, name: 'Neuffen', day: 'Day 2', desc: '15-min Tälesbahn ride; hike to Hohenneuffen Castle ruins', phase: 1, main: false },
-    { lat: 48.7758, lng: 9.1829, name: 'Stuttgart', day: 'Day 3', desc: 'Mercedes-Benz Museum, Schlossplatz, Markthalle', phase: 1, main: true },
-    { lat: 48.7396, lng: 9.3049, name: 'Esslingen', day: 'Day 3', desc: '200+ half-timbered houses, oldest row in Germany (1328)', phase: 1, main: false },
-    { lat: 48.5216, lng: 9.0576, name: 'Tübingen', day: 'Day 4', desc: 'Neckarfront, Hohentübingen Castle, Stocherkahn punt boats', phase: 1, main: true },
+    // Phase 1: Arrival & Nürtingen base
+    { lat: 50.1109, lng: 8.6821, name: 'Frankfurt Airport', day: 'Day 1 — Sat May 16', desc: 'Arrive 10 AM, train to Nürtingen (~2 hrs via Stuttgart)', phase: 1, main: true },
+    { lat: 48.6266, lng: 9.3365, name: 'Nürtingen', day: 'Days 1–3', desc: 'Home base on the Neckar — old town, river walks, Hölderlin heritage', phase: 1, main: true },
+    { lat: 48.5553, lng: 9.3753, name: 'Neuffen', day: 'Day 3 — Mon May 18', desc: 'Wedding at Burg Hohenneuffen; RB 65 Tälesbahn, 15 min', phase: 1, main: false },
+    { lat: 48.7758, lng: 9.1829, name: 'Stuttgart', day: 'Day 4 — Tue May 19', desc: 'Mercedes-Benz Museum, Schlossplatz, Markthalle', phase: 1, main: true },
+    { lat: 48.7396, lng: 9.3049, name: 'Esslingen', day: 'Day 4 — Tue May 19', desc: '200+ half-timbered houses, oldest row in Germany (1328)', phase: 1, main: false },
+    { lat: 48.5216, lng: 9.0576, name: 'Tübingen', day: 'Day 5 — Wed May 20', desc: 'Neckarfront, Hohentübingen Castle, Stocherkahn punt boats', phase: 1, main: true },
 
     // Phase 2: Black Forest & Heidelberg
-    { lat: 48.7606, lng: 8.2408, name: 'Baden-Baden', day: 'Day 5', desc: 'Start of the Schwarzwaldhochstraße (B500)', phase: 2, main: false },
-    { lat: 48.5964, lng: 8.2003, name: 'Mummelsee', day: 'Day 5', desc: 'Glacial lake at 1,036m with forest trail and cafe', phase: 2, main: false },
-    { lat: 48.5106, lng: 8.1803, name: 'Allerheiligen', day: 'Day 5', desc: 'Cascading waterfalls with monastery ruins', phase: 2, main: false },
-    { lat: 48.1300, lng: 8.2331, name: 'Triberg', day: 'Day 5', desc: "Germany's highest waterfalls (163m) and cuckoo clocks", phase: 2, main: true },
-    { lat: 49.4094, lng: 8.6942, name: 'Heidelberg', day: 'Days 5–6', desc: 'Castle ruins, Alte Brücke, Philosophenweg, oldest university', phase: 2, main: true },
+    { lat: 48.7606, lng: 8.2408, name: 'Baden-Baden', day: 'Day 6 — Thu May 21', desc: 'Start of the Schwarzwaldhochstraße (B500)', phase: 2, main: false },
+    { lat: 48.5964, lng: 8.2003, name: 'Mummelsee', day: 'Day 6 — Thu May 21', desc: 'Glacial lake at 1,036m with forest trail and cafe', phase: 2, main: false },
+    { lat: 48.5106, lng: 8.1803, name: 'Allerheiligen', day: 'Day 6 — Thu May 21', desc: 'Cascading waterfalls with monastery ruins', phase: 2, main: false },
+    { lat: 48.1300, lng: 8.2331, name: 'Triberg', day: 'Day 6 — Thu May 21', desc: "Germany's highest waterfalls (163m) and cuckoo clocks", phase: 2, main: true },
+    { lat: 49.4094, lng: 8.6942, name: 'Heidelberg', day: 'Days 6–7 — Thu–Fri', desc: 'Castle ruins, Alte Brücke, Philosophenweg, oldest university', phase: 2, main: true },
 
     // Phase 3: Rhine & Frankfurt
-    { lat: 50.0598, lng: 7.7684, name: 'Bacharach', day: 'Days 7–8', desc: 'Wine village on the Rhine; Burg Stahleck, Wernerkapelle', phase: 3, main: true },
-    { lat: 50.1537, lng: 7.7106, name: 'St. Goar', day: 'Day 7', desc: 'Burg Rheinfels — vast ruin with underground tunnels', phase: 3, main: false },
-    { lat: 50.1413, lng: 7.7316, name: 'Lorelei Rock', day: 'Day 7', desc: 'Legendary 132m cliff at the Rhine\'s narrowest point', phase: 3, main: false },
-    { lat: 50.1109, lng: 8.6821, name: 'Frankfurt', day: 'Day 8', desc: 'Departure — ~1 hr direct train from Bacharach', phase: 3, main: true }
+    { lat: 50.0598, lng: 7.7684, name: 'Bacharach', day: 'Days 8–9 — Sat–Sun', desc: 'Wine village on the Rhine; Burg Stahleck, Wernerkapelle', phase: 3, main: true },
+    { lat: 50.1537, lng: 7.7106, name: 'St. Goar', day: 'Day 8 — Sat May 23', desc: 'Burg Rheinfels — vast ruin with underground tunnels', phase: 3, main: false },
+    { lat: 50.1413, lng: 7.7316, name: 'Lorelei Rock', day: 'Day 8 — Sat May 23', desc: 'Legendary 132m cliff at the Rhine\'s narrowest point', phase: 3, main: false },
+    { lat: 50.1109, lng: 8.6821, name: 'Frankfurt Airport', day: 'Day 9 — Sun May 24', desc: '11 AM flight — ~7:30 AM train from Bacharach', phase: 3, main: true }
   ];
 
   // ── Route Lines ──
+  // Train: Frankfurt Airport → Stuttgart → Nürtingen (arrival)
+  const trainArrival = [
+    [50.1109,8.6821],[50.0500,8.5000],[50.0000,8.3000],
+    [49.9800,8.1500],[49.5000,8.5500],[49.2000,8.8000],
+    [48.7758,9.1829],[48.7396,9.3049],[48.6266,9.3365]
+  ];
   // Train: Nürtingen → Neuffen
   const trainNeuffen = [[48.6266,9.3365],[48.5925,9.3580],[48.5553,9.3753]];
   // Train: Nürtingen → Esslingen → Stuttgart
@@ -623,6 +630,7 @@
     return line;
   }
 
+  addRoute(trainArrival, '#5b9bd5', null, 1);
   addRoute(trainNeuffen, '#5b9bd5', null, 1);
   addRoute(trainStuttgart, '#5b9bd5', null, 1);
   addRoute(trainTubingen, '#5b9bd5', null, 1);
@@ -679,23 +687,47 @@
 
   <!-- ═══ PHASE 1: NÜRTINGEN BASE ═══ -->
   <div class="phase-divider">
-    <h3>Nürtingen &amp; the Neckar Valley</h3>
-    <p>May 17–20 — Based in Nürtingen</p>
+    <h3>Arrival &amp; the Neckar Valley</h3>
+    <p>May 16–20 — Based in Nürtingen</p>
   </div>
 
-  <!-- Day 1: May 17 — Arrive Nürtingen -->
+  <!-- Day 1: May 16 — Arrive Frankfurt, travel to Nürtingen -->
   <div class="day-card">
     <div class="day-image">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Nuertingen2_BMK.jpg" alt="Nürtingen old town on the Neckar" loading="lazy">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Frankfurt_Main_August_2020_1.jpg/1280px-Frankfurt_Main_August_2020_1.jpg" alt="Frankfurt skyline" loading="lazy">
       <div class="day-number">Day 1</div>
     </div>
     <div class="day-content">
+      <div class="day-date">Saturday, May 16</div>
+      <h3>Frankfurt to Nürtingen</h3>
+      <p class="day-subtitle">Land at Frankfurt, hop on a train south to your home base on the Neckar.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+        ICE + MEX — Frankfurt Airport → Stuttgart → Nürtingen, ~2 hrs
+      </div>
+      <ul class="highlights">
+        <li><strong>10:00 AM arrival</strong> at Frankfurt Airport (FRA)</li>
+        <li><strong>Frankfurt Flughafen Fernbahnhof</strong> — the long-distance train station is inside the airport; follow signs to "Fernbahnhof"</li>
+        <li><strong>ICE to Stuttgart Hbf</strong> — ~1 hr 10 min, trains every 30 min</li>
+        <li><strong>Stuttgart → Nürtingen</strong> — MEX 12/18, ~35 min (same platform level)</li>
+        <li><strong>Afternoon:</strong> Check in, rest, and take a first stroll through Nürtingen's old town and along the Neckar</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 2: May 17 — Explore Nürtingen -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Nuertingen2_BMK.jpg" alt="Nürtingen old town on the Neckar" loading="lazy">
+      <div class="day-number">Day 2</div>
+    </div>
+    <div class="day-content">
       <div class="day-date">Sunday, May 17</div>
-      <h3>Arrive in Nürtingen</h3>
-      <p class="day-subtitle">Settle in and explore your home base on the Neckar.</p>
+      <h3>Explore Nürtingen</h3>
+      <p class="day-subtitle">A relaxed day discovering your home base on the Neckar.</p>
       <div class="transport-badge">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        Arrival day — explore on foot
+        On foot — explore the town
       </div>
       <ul class="highlights">
         <li><strong>Old Town</strong> — winding alleys and half-timbered houses that inspired the poet Hölderlin</li>
@@ -706,11 +738,11 @@
     </div>
   </div>
 
-  <!-- Day 2: May 18 — Nürtingen & Neuffen -->
+  <!-- Day 3: May 18 — Wedding at Burg Hohenneuffen -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Hohenzollern_castle_1.JPG" alt="Swabian Alb castle" loading="lazy">
-      <div class="day-number">Day 2</div>
+      <div class="day-number">Day 3</div>
     </div>
     <div class="day-content">
       <div class="day-date">Monday, May 18</div>
@@ -729,11 +761,11 @@
     </div>
   </div>
 
-  <!-- Day 3: May 19 — Stuttgart & Esslingen -->
+  <!-- Day 4: May 19 — Stuttgart & Esslingen -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/StuttgartSchlossPlatz.JPG" alt="Stuttgart Schlossplatz" loading="lazy">
-      <div class="day-number">Day 3</div>
+      <div class="day-number">Day 4</div>
     </div>
     <div class="day-content">
       <div class="day-date">Tuesday, May 19</div>
@@ -752,11 +784,11 @@
     </div>
   </div>
 
-  <!-- Day 4: May 20 — Tübingen & Hohenzollern -->
+  <!-- Day 5: May 20 — Tübingen -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/T%C3%BCbingen_-_Neckarfront_01.JPG" alt="Tübingen Neckarfront" loading="lazy">
-      <div class="day-number">Day 4</div>
+      <div class="day-number">Day 5</div>
     </div>
     <div class="day-content">
       <div class="day-date">Wednesday, May 20</div>
@@ -782,11 +814,11 @@
     <p>May 21–22 — Heading west and north</p>
   </div>
 
-  <!-- Day 5: May 21 — Black Forest -->
+  <!-- Day 6: May 21 — Black Forest -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B500_Black_Forest.jpg" alt="Black Forest B500 scenic road" loading="lazy">
-      <div class="day-number">Day 5</div>
+      <div class="day-number">Day 6</div>
     </div>
     <div class="day-content">
       <div class="day-date">Thursday, May 21</div>
@@ -799,19 +831,19 @@
       <ul class="highlights">
         <li><strong>Pick up rental</strong> at Stuttgart Hbf (Sixt or Europcar, ~€40–60/day) — take the MEX from Nürtingen first</li>
         <li><strong>Schwarzwaldhochstraße (B500)</strong> — the legendary 60 km Black Forest High Road from Baden-Baden to Freudenstadt at 800–1,000m elevation</li>
-        <li><strong>Mummelsee</strong> �� glacial lake at 1,036m surrounded by dense forest, with a lakeside cafe and circular trail</li>
+        <li><strong>Mummelsee</strong> — glacial lake at 1,036m surrounded by dense forest, with a lakeside cafe and circular trail</li>
         <li><strong>Allerheiligen Waterfalls</strong> — cascading falls with monastery ruins at the top</li>
-        <li><strong>Triberg Waterfalls</strong> ��� Germany's highest at 163m across 7 cascades, plus the world's biggest cuckoo clocks</li>
+        <li><strong>Triberg Waterfalls</strong> — Germany's highest at 163m across 7 cascades, plus the world's biggest cuckoo clocks</li>
         <li><strong>Drop off car</strong> in Stuttgart or Heidelberg in the evening; stay overnight in Heidelberg</li>
       </ul>
     </div>
   </div>
 
-  <!-- Day 6: May 22 — Heidelberg -->
+  <!-- Day 7: May 22 — Heidelberg -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Heidelberg_Germany_Castle.JPG" alt="Heidelberg Castle" loading="lazy">
-      <div class="day-number">Day 6</div>
+      <div class="day-number">Day 7</div>
     </div>
     <div class="day-content">
       <div class="day-date">Friday, May 22</div>
@@ -838,11 +870,11 @@
     <p>May 23–24 — Based in Bacharach, UNESCO World Heritage</p>
   </div>
 
-  <!-- Day 7: May 23 — Rhine Valley -->
+  <!-- Day 8: May 23 — Rhine Valley -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Bacharach_from_the_Postenturm.jpg" alt="Bacharach on the Rhine" loading="lazy">
-      <div class="day-number">Day 7</div>
+      <div class="day-number">Day 8</div>
     </div>
     <div class="day-content">
       <div class="day-date">Saturday, May 23</div>
@@ -863,11 +895,11 @@
     </div>
   </div>
 
-  <!-- Day 8: May 24 — Rhine morning + Frankfurt -->
+  <!-- Day 9: May 24 — Departure -->
   <div class="day-card">
     <div class="day-image">
       <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Burg_Katz_und_Loreley.jpg" alt="Burg Katz and the Lorelei on the Rhine" loading="lazy">
-      <div class="day-number">Day 8</div>
+      <div class="day-number">Day 9</div>
     </div>
     <div class="day-content">
       <div class="day-date">Sunday, May 24</div>
