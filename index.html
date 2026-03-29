@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Germany Trip — May 16–24, 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --card-bg: #1a1a1a;
+    --card-border: #2a2a2a;
+    --accent: #d4a44c;
+    --accent-dim: #b8893a;
+    --text: #e8e8e8;
+    --text-muted: #999;
+    --text-dim: #666;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      url('https://upload.wikimedia.org/wikipedia/commons/2/27/Loreley%2C_Rhine%2C_Castle_Katz.jpg')
+      center/cover no-repeat;
+    filter: brightness(0.35) saturate(0.8);
+    transform: scale(1.05);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    padding: 2rem;
+  }
+  .hero-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 540px;
+    margin: 0 auto 2rem;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .scroll-hint svg { width: 20px; height: 20px; stroke: var(--text-dim); }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* Info Bar */
+  .info-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2.5rem 2rem;
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .info-item {
+    text-align: center;
+    min-width: 140px;
+  }
+  .info-item .label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 0.3rem;
+  }
+  .info-item .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent);
+  }
+
+  /* Phase dividers */
+  .phase-divider {
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .phase-divider h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .phase-divider p {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+  .phase-divider::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--card-border);
+    margin: 1.5rem auto 0;
+  }
+
+  /* Section titles */
+  .section-title {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .section-title p {
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 550px;
+    margin: 0 auto;
+  }
+
+  /* Day Cards */
+  .days { max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+  .day-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .day-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .day-card:nth-child(even) { direction: rtl; }
+  .day-card:nth-child(even) > * { direction: ltr; }
+
+  .day-image {
+    position: relative;
+    min-height: 380px;
+    overflow: hidden;
+  }
+  .day-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .day-card:hover .day-image img { transform: scale(1.05); }
+  .day-number {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .day-content {
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .day-date {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+    font-weight: 500;
+  }
+  .day-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .day-subtitle {
+    color: var(--text-muted);
+    font-weight: 300;
+    font-size: 0.95rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .transport-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(212,164,76,0.1);
+    border: 1px solid rgba(212,164,76,0.25);
+    border-radius: 8px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+  }
+  .transport-badge svg { width: 14px; height: 14px; }
+
+  .highlights { list-style: none; }
+  .highlights li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .highlights li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .highlights li strong { color: var(--text); font-weight: 500; }
+
+  /* Bonus card */
+  .bonus-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+
+  /* Map Section */
+  .map-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+  #trip-map {
+    width: 100%;
+    height: 560px;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    z-index: 0;
+  }
+  .map-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.2rem 0 0;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+  .legend-line {
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .map-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    padding: 1rem 0 0;
+  }
+  .map-filter-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .map-filter-btn:hover, .map-filter-btn.active {
+    background: rgba(212,164,76,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Leaflet popup overrides */
+  .leaflet-popup-content-wrapper {
+    background: #1a1a1a !important;
+    color: #e8e8e8 !important;
+    border-radius: 10px !important;
+    border: 1px solid #2a2a2a !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+  }
+  .leaflet-popup-tip { background: #1a1a1a !important; }
+  .leaflet-popup-content {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
+    margin: 10px 14px !important;
+  }
+  .leaflet-popup-content strong { color: #d4a44c; }
+  .leaflet-popup-content .popup-day {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #d4a44c;
+    margin-bottom: 2px;
+  }
+  .leaflet-popup-content .popup-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .leaflet-popup-content .popup-desc {
+    color: #999;
+    font-weight: 300;
+    font-size: 0.8rem;
+  }
+  .leaflet-popup-close-button { color: #666 !important; }
+
+  /* Tips Section */
+  .tips {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .tip-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+  .tip-card h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.3rem;
+  }
+  .tip-card .price {
+    color: var(--accent);
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .tip-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--card-border);
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-weight: 300;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .day-card, .day-card:nth-child(even) {
+      grid-template-columns: 1fr;
+      direction: ltr;
+    }
+    .day-image { min-height: 240px; }
+    .day-content { padding: 1.8rem; }
+    .hero { min-height: 500px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">May 16 – 24, 2026</div>
+    <h1>From the Neckar<br>to the Rhine</h1>
+    <p>Medieval towns, Black Forest roads, hilltop castles, and the legendary Rhine Gorge — a week across southern Germany by rail and road.</p>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- Info Bar -->
+<div class="info-bar">
+  <div class="info-item">
+    <div class="label">Start</div>
+    <div class="value">Nürtingen</div>
+  </div>
+  <div class="info-item">
+    <div class="label">Regions</div>
+    <div class="value">3 Regions</div>
+  </div>
+  <div class="info-item">
+    <div class="label">Duration</div>
+    <div class="value">8 Nights</div>
+  </div>
+  <div class="info-item">
+    <div class="label">Transport</div>
+    <div class="value">Rail + Car</div>
+  </div>
+  <div class="info-item">
+    <div class="label">Finish</div>
+    <div class="value">Frankfurt</div>
+  </div>
+</div>
+
+<!-- Interactive Map -->
+<div class="section-title">
+  <h2>The Route</h2>
+  <p>From the Neckar valley through the Black Forest, up to the Rhine Gorge, and on to Frankfurt. Click any stop for details.</p>
+</div>
+
+<div class="map-section">
+  <div id="trip-map"></div>
+  <div class="map-legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#d4a44c;"></div> Main stops</div>
+    <div class="legend-item"><div class="legend-line" style="background:#5b9bd5;"></div> Train routes</div>
+    <div class="legend-item"><div class="legend-line" style="background:#70ad47; border-style: dashed;"></div> Rental car drive</div>
+    <div class="legend-item"><div class="legend-line" style="background:#c45b5b;"></div> Rhine cruise</div>
+  </div>
+  <div class="map-filters">
+    <button class="map-filter-btn active" onclick="showAll()">All Days</button>
+    <button class="map-filter-btn" onclick="showPhase(1)">Nürtingen Base</button>
+    <button class="map-filter-btn" onclick="showPhase(2)">Black Forest &amp; Heidelberg</button>
+    <button class="map-filter-btn" onclick="showPhase(3)">Rhine &amp; Frankfurt</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── Map Setup ──
+  const map = L.map('trip-map', {
+    scrollWheelZoom: false,
+    zoomControl: true
+  }).setView([49.2, 8.8], 8);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  // ── Marker Style ──
+  function makeIcon(color, size) {
+    return L.divIcon({
+      className: '',
+      html: '<div style="width:'+size+'px;height:'+size+'px;background:'+color+';border:2px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.5);"></div>',
+      iconSize: [size, size],
+      iconAnchor: [size/2, size/2],
+      popupAnchor: [0, -size/2 - 4]
+    });
+  }
+
+  const mainIcon = makeIcon('#d4a44c', 16);
+  const smallIcon = makeIcon('#888', 10);
+  const accentSmall = makeIcon('#d4a44c', 11);
+
+  // ── Stops ──
+  const stops = [
+    // Phase 1: Nürtingen base
+    { lat: 48.6266, lng: 9.3365, name: 'Nürtingen', day: 'Days 1–2', desc: 'Home base on the Neckar — old town, river walks, Hölderlin heritage', phase: 1, main: true },
+    { lat: 48.5553, lng: 9.3753, name: 'Neuffen', day: 'Day 2', desc: '15-min Tälesbahn ride; hike to Hohenneuffen Castle ruins', phase: 1, main: false },
+    { lat: 48.7758, lng: 9.1829, name: 'Stuttgart', day: 'Day 3', desc: 'Mercedes-Benz Museum, Schlossplatz, Markthalle', phase: 1, main: true },
+    { lat: 48.7396, lng: 9.3049, name: 'Esslingen', day: 'Day 3', desc: '200+ half-timbered houses, oldest row in Germany (1328)', phase: 1, main: false },
+    { lat: 48.5216, lng: 9.0576, name: 'Tübingen', day: 'Day 4', desc: 'Neckarfront, Hohentübingen Castle, Stocherkahn punt boats', phase: 1, main: true },
+
+    // Phase 2: Black Forest & Heidelberg
+    { lat: 48.7606, lng: 8.2408, name: 'Baden-Baden', day: 'Day 5', desc: 'Start of the Schwarzwaldhochstraße (B500)', phase: 2, main: false },
+    { lat: 48.5964, lng: 8.2003, name: 'Mummelsee', day: 'Day 5', desc: 'Glacial lake at 1,036m with forest trail and cafe', phase: 2, main: false },
+    { lat: 48.5106, lng: 8.1803, name: 'Allerheiligen', day: 'Day 5', desc: 'Cascading waterfalls with monastery ruins', phase: 2, main: false },
+    { lat: 48.1300, lng: 8.2331, name: 'Triberg', day: 'Day 5', desc: "Germany's highest waterfalls (163m) and cuckoo clocks", phase: 2, main: true },
+    { lat: 49.4094, lng: 8.6942, name: 'Heidelberg', day: 'Days 5–6', desc: 'Castle ruins, Alte Brücke, Philosophenweg, oldest university', phase: 2, main: true },
+
+    // Phase 3: Rhine & Frankfurt
+    { lat: 50.0598, lng: 7.7684, name: 'Bacharach', day: 'Days 7–8', desc: 'Wine village on the Rhine; Burg Stahleck, Wernerkapelle', phase: 3, main: true },
+    { lat: 50.1537, lng: 7.7106, name: 'St. Goar', day: 'Day 7', desc: 'Burg Rheinfels — vast ruin with underground tunnels', phase: 3, main: false },
+    { lat: 50.1413, lng: 7.7316, name: 'Lorelei Rock', day: 'Day 7', desc: 'Legendary 132m cliff at the Rhine\'s narrowest point', phase: 3, main: false },
+    { lat: 50.1109, lng: 8.6821, name: 'Frankfurt', day: 'Day 8', desc: 'Departure — ~1 hr direct train from Bacharach', phase: 3, main: true }
+  ];
+
+  // ── Route Lines ──
+  // Train: Nürtingen → Neuffen
+  const trainNeuffen = [[48.6266,9.3365],[48.5925,9.3580],[48.5553,9.3753]];
+  // Train: Nürtingen → Esslingen → Stuttgart
+  const trainStuttgart = [[48.6266,9.3365],[48.7000,9.3200],[48.7396,9.3049],[48.7550,9.2200],[48.7758,9.1829]];
+  // Train: Nürtingen → Tübingen
+  const trainTubingen = [[48.6266,9.3365],[48.5900,9.2800],[48.5600,9.2000],[48.5350,9.1200],[48.5216,9.0576]];
+  // Car: Stuttgart → Baden-Baden → Mummelsee → Allerheiligen → Triberg (Black Forest)
+  const carBlackForest = [
+    [48.7758,9.1829],[48.7700,9.0500],[48.7600,8.9000],[48.7606,8.2408],
+    [48.6800,8.2100],[48.5964,8.2003],[48.5106,8.1803],
+    [48.3500,8.2100],[48.1300,8.2331]
+  ];
+  // Car/Train: Triberg → Heidelberg (via Offenburg/Mannheim)
+  const toHeidelberg = [
+    [48.1300,8.2331],[48.4500,8.0500],[48.6000,8.2000],[48.8500,8.4000],
+    [49.0000,8.5000],[49.2000,8.6000],[49.4094,8.6942]
+  ];
+  // Train: Heidelberg → Bacharach
+  const trainBacharach = [
+    [49.4094,8.6942],[49.5000,8.5500],[49.6000,8.3500],
+    [49.7500,8.2500],[49.8500,8.1000],[49.9500,7.9500],[50.0598,7.7684]
+  ];
+  // Rhine cruise: Bacharach → St. Goar (via Lorelei)
+  const rhineCruise = [[50.0598,7.7684],[50.0800,7.7600],[50.1000,7.7500],[50.1200,7.7400],[50.1413,7.7316],[50.1537,7.7106]];
+  // Train: Bacharach → Frankfurt
+  const trainFrankfurt = [
+    [50.0598,7.7684],[50.0000,7.9000],[49.9800,8.1500],
+    [50.0000,8.3000],[50.0500,8.5000],[50.1109,8.6821]
+  ];
+
+  // ── Layer Groups ──
+  const allMarkers = [];
+  const allLines = [];
+  const phaseLayers = { 1: [], 2: [], 3: [] };
+
+  // Create markers
+  stops.forEach(s => {
+    const icon = s.main ? mainIcon : (s.phase === 1 ? smallIcon : accentSmall);
+    const popup = '<div class="popup-day">'+s.day+'</div><div class="popup-title">'+s.name+'</div><div class="popup-desc">'+s.desc+'</div>';
+    const marker = L.marker([s.lat, s.lng], { icon: icon }).bindPopup(popup).addTo(map);
+    allMarkers.push(marker);
+    phaseLayers[s.phase].push(marker);
+  });
+
+  // Create route lines
+  function addRoute(coords, color, dash, phase) {
+    const line = L.polyline(coords, {
+      color: color,
+      weight: 3,
+      opacity: 0.8,
+      dashArray: dash || null,
+      smoothFactor: 1.5
+    }).addTo(map);
+    allLines.push(line);
+    phaseLayers[phase].push(line);
+    return line;
+  }
+
+  addRoute(trainNeuffen, '#5b9bd5', null, 1);
+  addRoute(trainStuttgart, '#5b9bd5', null, 1);
+  addRoute(trainTubingen, '#5b9bd5', null, 1);
+  addRoute(carBlackForest, '#70ad47', '8 6', 2);
+  addRoute(toHeidelberg, '#70ad47', '8 6', 2);
+  addRoute(trainBacharach, '#5b9bd5', null, 3);
+  addRoute(rhineCruise, '#c45b5b', '4 6', 3);
+  addRoute(trainFrankfurt, '#5b9bd5', null, 3);
+
+  // ── Filter Controls ──
+  const allBounds = L.latLngBounds(stops.map(s => [s.lat, s.lng]));
+
+  function setVisibility(layers, visible) {
+    layers.forEach(l => {
+      if (visible) { if (!map.hasLayer(l)) map.addLayer(l); }
+      else { if (map.hasLayer(l)) map.removeLayer(l); }
+    });
+  }
+
+  function updateButtons(activeText) {
+    document.querySelectorAll('.map-filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === activeText);
+    });
+  }
+
+  window.showAll = function() {
+    [1,2,3].forEach(p => setVisibility(phaseLayers[p], true));
+    map.fitBounds(allBounds.pad(0.1));
+    updateButtons('All Days');
+  };
+
+  window.showPhase = function(phase) {
+    [1,2,3].forEach(p => setVisibility(phaseLayers[p], p === phase));
+    const bounds = L.latLngBounds(
+      phaseLayers[phase].filter(l => l.getLatLng).map(l => l.getLatLng())
+    );
+    if (bounds.isValid()) map.fitBounds(bounds.pad(0.3));
+    const labels = { 1: 'Nürtingen Base', 2: 'Black Forest & Heidelberg', 3: 'Rhine & Frankfurt' };
+    updateButtons(labels[phase]);
+  };
+
+  // Fit initial view
+  map.fitBounds(allBounds.pad(0.1));
+})();
+</script>
+
+<!-- Itinerary -->
+<div class="section-title">
+  <h2>The Itinerary</h2>
+  <p>South to north — from the Neckar valley through the Black Forest, up to the Rhine Gorge, and on to Frankfurt.</p>
+</div>
+
+<div class="days">
+
+  <!-- ═══ PHASE 1: NÜRTINGEN BASE ═══ -->
+  <div class="phase-divider">
+    <h3>Nürtingen &amp; the Neckar Valley</h3>
+    <p>May 17–20 — Based in Nürtingen</p>
+  </div>
+
+  <!-- Day 1: May 17 — Arrive Nürtingen -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/Nuertingen2_BMK.jpg" alt="Nürtingen old town on the Neckar" loading="lazy">
+      <div class="day-number">Day 1</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Sunday, May 17</div>
+      <h3>Arrive in Nürtingen</h3>
+      <p class="day-subtitle">Settle in and explore your home base on the Neckar.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Arrival day — explore on foot
+      </div>
+      <ul class="highlights">
+        <li><strong>Old Town</strong> — winding alleys and half-timbered houses that inspired the poet Hölderlin</li>
+        <li><strong>Neckar Riverfront</strong> — circular walk crossing several bridges with valley views</li>
+        <li><strong>St. Laurentius Church</strong> — Gothic church crowning the old town hilltop</li>
+        <li><strong>Villa Rustica</strong> — Roman estate ruins on the edge of town</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 2: May 18 — Nürtingen & Neuffen -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Hohenzollern_castle_1.JPG" alt="Swabian Alb castle" loading="lazy">
+      <div class="day-number">Day 2</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Monday, May 18</div>
+      <h3>Nürtingen &amp; Wedding at Burg Hohenneuffen</h3>
+      <p class="day-subtitle">Morning in town, afternoon celebrating at a castle on the Swabian Alb.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+        RB 65 Tälesbahn — 15 min to Neuffen
+      </div>
+      <ul class="highlights">
+        <li><strong>Morning:</strong> Explore Nürtingen — Neckar Höhenweg walk or old town stroll</li>
+        <li><strong>Afternoon:</strong> Wedding at <strong>Burg Hohenneuffen</strong> — take the RB 65 to Neuffen, then taxi or walk (~45 min uphill) to the castle</li>
+        <li><strong>Hohenneuffen Castle</strong> — stunning hilltop venue with panoramic views across the Swabian Alb</li>
+        <li><strong>Evening:</strong> Return to Nürtingen via Neuffen (last trains run until ~11 PM; arrange taxi as backup)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 3: May 19 — Stuttgart & Esslingen -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/StuttgartSchlossPlatz.JPG" alt="Stuttgart Schlossplatz" loading="lazy">
+      <div class="day-number">Day 3</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Tuesday, May 19</div>
+      <h3>Stuttgart &amp; Esslingen</h3>
+      <p class="day-subtitle">The state capital and Germany's finest half-timbered town, back to back.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+        MEX 12 / MEX 18 — 30–44 min to Stuttgart
+      </div>
+      <ul class="highlights">
+        <li><strong>Mercedes-Benz Museum</strong> — 160 vehicles across 9 floors of automotive history</li>
+        <li><strong>Schlossplatz</strong> — sweeping palace square with the Neues Schloss</li>
+        <li><strong>Markthalle</strong> — stunning Art Nouveau market hall, great for lunch</li>
+        <li><strong>Esslingen am Neckar</strong> — stop on the way back; 200+ half-timbered houses (oldest row in Germany, 1328), hilltop castle, and the Rathaus astronomical clock</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 4: May 20 — Tübingen & Hohenzollern -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/T%C3%BCbingen_-_Neckarfront_01.JPG" alt="Tübingen Neckarfront" loading="lazy">
+      <div class="day-number">Day 4</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Wednesday, May 20</div>
+      <h3>Tübingen</h3>
+      <p class="day-subtitle">A fairytale university town of cobbled lanes and punt boats.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+        RE 6 / MEX 12 — 25 min, 49 trains/day
+      </div>
+      <ul class="highlights">
+        <li><strong>Neckarfront</strong> — the iconic row of colorful houses along the river</li>
+        <li><strong>Hohentübingen Castle</strong> — hilltop castle with valley panoramas</li>
+        <li><strong>Hölderlinturm</strong> — the yellow tower museum on the Neckar</li>
+        <li><strong>Stocherkahn ride</strong> — punt boat on the Neckar (a Tübingen tradition)</li>
+        <li><strong>Marktplatz</strong> — medieval market square with the ornate Rathaus</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 2: BLACK FOREST & HEIDELBERG ═══ -->
+  <div class="phase-divider">
+    <h3>Black Forest &amp; Heidelberg</h3>
+    <p>May 21–22 — Heading west and north</p>
+  </div>
+
+  <!-- Day 5: May 21 — Black Forest -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/B500_Black_Forest.jpg" alt="Black Forest B500 scenic road" loading="lazy">
+      <div class="day-number">Day 5</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Thursday, May 21</div>
+      <h3>Black Forest Road Trip</h3>
+      <p class="day-subtitle">Rent a car and drive Germany's oldest scenic route through dark pines, waterfalls, and glacial lakes.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17h10M5 13l2-8h10l2 8M5 13h14v4H5z"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+        Rental car from Stuttgart Hbf — Sixt / Europcar
+      </div>
+      <ul class="highlights">
+        <li><strong>Pick up rental</strong> at Stuttgart Hbf (Sixt or Europcar, ~€40–60/day) — take the MEX from Nürtingen first</li>
+        <li><strong>Schwarzwaldhochstraße (B500)</strong> — the legendary 60 km Black Forest High Road from Baden-Baden to Freudenstadt at 800–1,000m elevation</li>
+        <li><strong>Mummelsee</strong> �� glacial lake at 1,036m surrounded by dense forest, with a lakeside cafe and circular trail</li>
+        <li><strong>Allerheiligen Waterfalls</strong> — cascading falls with monastery ruins at the top</li>
+        <li><strong>Triberg Waterfalls</strong> ��� Germany's highest at 163m across 7 cascades, plus the world's biggest cuckoo clocks</li>
+        <li><strong>Drop off car</strong> in Stuttgart or Heidelberg in the evening; stay overnight in Heidelberg</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 6: May 22 — Heidelberg -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Heidelberg_Germany_Castle.JPG" alt="Heidelberg Castle" loading="lazy">
+      <div class="day-number">Day 6</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Friday, May 22</div>
+      <h3>Heidelberg</h3>
+      <p class="day-subtitle">Romantic ruins, the oldest university, and Germany's most famous bridge.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Full day on foot — overnight in Heidelberg
+      </div>
+      <ul class="highlights">
+        <li><strong>Heidelberg Castle</strong> — iconic ruins above the Neckar; take the Bergbahn funicular up</li>
+        <li><strong>Alte Brücke</strong> — 18th-century stone bridge, one of Germany's most photographed</li>
+        <li><strong>Philosophenweg</strong> — Philosophers' Walk with sweeping views of the castle and old town</li>
+        <li><strong>Altstadt</strong> — Germany's longest pedestrian street, cafes and bookshops</li>
+        <li><strong>Heidelberg University</strong> — founded 1386, Germany's oldest</li>
+        <li><strong>Evening:</strong> Train to Bacharach in the Rhine Valley (~1.5 hrs) to check in for two nights</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══ PHASE 3: RHINE VALLEY ═══ -->
+  <div class="phase-divider">
+    <h3>The Rhine Gorge</h3>
+    <p>May 23–24 — Based in Bacharach, UNESCO World Heritage</p>
+  </div>
+
+  <!-- Day 7: May 23 — Rhine Valley -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Bacharach_from_the_Postenturm.jpg" alt="Bacharach on the Rhine" loading="lazy">
+      <div class="day-number">Day 7</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Saturday, May 23</div>
+      <h3>Rhine Valley — Bacharach</h3>
+      <p class="day-subtitle">Half-timbered wine village beneath a hilltop castle, in the heart of the Rhine Gorge.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        On foot + KD Rhine cruise
+      </div>
+      <ul class="highlights">
+        <li><strong>Bacharach old town</strong> — cobblestone lanes, half-timbered houses, Wernerkapelle gothic ruin</li>
+        <li><strong>Burg Stahleck</strong> — 12th-century castle overlooking the Rhine (now a hostel, but the courtyard views are free)</li>
+        <li><strong>KD Rhine cruise</strong> — hop-on hop-off boat through the UNESCO gorge past 40+ castles; the most scenic stretch is Bacharach to St. Goar</li>
+        <li><strong>Lorelei Rock</strong> — the legendary 132m slate cliff at the Rhine's narrowest point, visible from the boat</li>
+        <li><strong>Burg Rheinfels</strong> — vast castle ruin in St. Goar with underground tunnels (short train or boat from Bacharach)</li>
+        <li><strong>Evening:</strong> Rhine wine tasting in a Bacharach Weinstube</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Day 8: May 24 — Rhine morning + Frankfurt -->
+  <div class="day-card">
+    <div class="day-image">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Burg_Katz_und_Loreley.jpg" alt="Burg Katz and the Lorelei on the Rhine" loading="lazy">
+      <div class="day-number">Day 8</div>
+    </div>
+    <div class="day-content">
+      <div class="day-date">Sunday, May 24</div>
+      <h3>Early Train &amp; 11 AM Flight</h3>
+      <p class="day-subtitle">An early departure from Bacharach to Frankfurt Airport for your morning flight.</p>
+      <div class="transport-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+        Bacharach → Frankfurt Airport — ~1 hr 15 min
+      </div>
+      <ul class="highlights">
+        <li><strong>11:00 AM flight</strong> — aim to arrive at Frankfurt Airport by 8:30–9:00 AM</li>
+        <li><strong>~7:30 AM train</strong> from Bacharach → Frankfurt Flughafen (Airport) — direct, ~1 hr 15 min</li>
+        <li><strong>Backup:</strong> First train departs Bacharach around 5:37 AM if you prefer extra buffer</li>
+        <li><strong>Alternative:</strong> Stay in Frankfurt or Mainz the night of the 23rd for a more relaxed morning</li>
+        <li><strong>Book ICE Sparpreis early</strong> on bahn.de for fares from ~€18</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- Ticket Tips -->
+<div class="section-title">
+  <h2>Ticket Tips</h2>
+  <p>Save money with these regional and national rail passes.</p>
+</div>
+
+<div class="tips">
+  <div class="tips-grid">
+    <div class="tip-card">
+      <h4>Baden-Württemberg-Ticket</h4>
+      <div class="price">€35</div>
+      <p>Unlimited travel on all regional trains, buses, and trams across the entire state for one day. Each additional traveler is just €10. Valid weekdays 9am–3am, weekends from midnight. <strong>Perfect for the Tübingen and Nürtingen-based day trips.</strong></p>
+    </div>
+    <div class="tip-card">
+      <h4>Deutschland-Ticket</h4>
+      <div class="price">~€49/month</div>
+      <p>Monthly pass for all regional and local transport nationwide — including the Rhine Valley trains. If you're taking 3+ day trips on regional trains, this beats buying individual day tickets.</p>
+    </div>
+    <div class="tip-card">
+      <h4>ICE Sparpreis</h4>
+      <div class="price">from €18</div>
+      <p>Discounted advance-purchase tickets for high-speed ICE trains. Best for the Heidelberg and Frankfurt legs. Book early on <strong>bahn.de</strong> or the <strong>DB Navigator</strong> app for the lowest fares.</p>
+    </div>
+    <div class="tip-card">
+      <h4>Rental Car (Black Forest)</h4>
+      <div class="price">~€40–60/day</div>
+      <p>Pick up and drop off at <strong>Stuttgart Hauptbahnhof</strong> — both <strong>Sixt</strong> and <strong>Europcar</strong> have desks at the station. A car is the best way to explore the Black Forest's scenic mountain roads and waterfalls at your own pace.</p>
+    </div>
+    <div class="tip-card">
+      <h4>KD Rhine Cruise</h4>
+      <div class="price">~€15–36</div>
+      <p>Hop-on hop-off boats between Koblenz and Bingen, running daily Apr–Oct. KD celebrates its <strong>200th anniversary in 2026</strong>. The Bacharach–St. Goar stretch passes the Lorelei and the densest cluster of castles. Free with Eurail pass.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>Train times sourced from <a href="https://int.bahn.de/en" target="_blank">Deutsche Bahn</a> &amp; <a href="https://www.thetrainline.com" target="_blank">Trainline</a>. Photos via <a href="https://commons.wikimedia.org" target="_blank">Wikimedia Commons</a> (CC-BY-SA).</p>
+  <p style="margin-top: 0.5rem;">Plan your routes with the <a href="https://int.bahn.de/en" target="_blank">DB Navigator app</a>.</p>
+</footer>
+
+</body>
+</html>
