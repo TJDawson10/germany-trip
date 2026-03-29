@@ -284,6 +284,93 @@
   }
   .highlights li strong { color: var(--text); font-weight: 500; }
 
+  /* Swipeable option cards */
+  .day-card-slider {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+  .slider-label {
+    text-align: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+  }
+  .slider-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 0;
+    border-radius: 16px;
+  }
+  .slider-track::-webkit-scrollbar { display: none; }
+  .slider-track .day-card {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    margin-bottom: 0;
+    border-radius: 16px;
+  }
+  .slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .slider-arrow {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-muted);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+  .slider-arrow:hover {
+    background: rgba(212,164,76,0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .slider-dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--card-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .slider-dot.active {
+    background: var(--accent);
+    transform: scale(1.2);
+  }
+  .option-label {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(212,164,76,0.9);
+    color: #0f0f0f;
+    border-radius: 8px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 600;
+    z-index: 2;
+  }
+
   /* Bonus card */
   .bonus-card {
     background: var(--card-bg);
@@ -428,6 +515,192 @@
     line-height: 1.6;
   }
 
+  /* Countdown */
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .countdown-unit {
+    text-align: center;
+  }
+  .countdown-num {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .countdown-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-top: 0.3rem;
+  }
+  .countdown-past {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-top: 1.5rem;
+  }
+
+  /* Info grid sections */
+  .info-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 5rem;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+  .info-panel {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+  .info-panel h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+  }
+  .info-panel h4 .panel-icon {
+    margin-right: 0.5rem;
+  }
+
+  /* Weather grid */
+  .weather-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+  .weather-stat {
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  .weather-stat .val {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .weather-stat .lbl {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.2rem;
+  }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    columns: 2;
+    column-gap: 1rem;
+  }
+  .checklist li {
+    position: relative;
+    padding-left: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    break-inside: avoid;
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 3px;
+  }
+
+  /* Phrases */
+  .phrase-list {
+    list-style: none;
+  }
+  .phrase-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.85rem;
+  }
+  .phrase-list li:last-child { border-bottom: none; }
+  .phrase-de {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .phrase-en {
+    color: var(--text-dim);
+    font-weight: 300;
+    text-align: right;
+  }
+
+  /* Quick ref */
+  .ref-list {
+    list-style: none;
+  }
+  .ref-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  .ref-list li:last-child { border-bottom: none; }
+  .ref-list li strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .ref-list .ref-val {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Booking buttons */
+  .booking-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .booking-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+  }
+  .booking-btn:hover {
+    background: rgba(212,164,76,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .booking-btn .arrow { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .checklist { columns: 1; }
+    .weather-grid { grid-template-columns: 1fr 1fr; }
+    .countdown { gap: 1rem; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+
   /* Footer */
   footer {
     text-align: center;
@@ -459,6 +732,7 @@
     <div class="hero-label">May 16 – 24, 2026</div>
     <h1>From the Neckar<br>to the Rhine</h1>
     <p>Medieval towns, Black Forest roads, hilltop castles, and the legendary Rhine Gorge — a week across southern Germany by rail and road.</p>
+    <div id="countdown"></div>
   </div>
   <div class="scroll-hint">
     <span>Scroll</span>
@@ -677,6 +951,33 @@
 })();
 </script>
 
+<script>
+// Day 4 slider
+(function() {
+  const slider = document.getElementById('day4-slider');
+  if (!slider) return;
+  const dots = slider.parentElement.querySelectorAll('.slider-dot');
+
+  function updateDots() {
+    const idx = Math.round(slider.scrollLeft / slider.offsetWidth);
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  slider.addEventListener('scroll', updateDots);
+
+  window.slideDay4 = function(dir) {
+    const w = slider.offsetWidth;
+    const idx = Math.round(slider.scrollLeft / w);
+    const next = Math.max(0, Math.min(1, idx + dir));
+    slider.scrollTo({ left: next * w, behavior: 'smooth' });
+  };
+
+  window.slideDay4To = function(idx) {
+    slider.scrollTo({ left: idx * slider.offsetWidth, behavior: 'smooth' });
+  };
+})();
+</script>
+
 <!-- Itinerary -->
 <div class="section-title">
   <h2>The Itinerary</h2>
@@ -761,26 +1062,69 @@
     </div>
   </div>
 
-  <!-- Day 4: May 19 — Stuttgart & Esslingen -->
-  <div class="day-card">
-    <div class="day-image">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/StuttgartSchlossPlatz.JPG" alt="Stuttgart Schlossplatz" loading="lazy">
-      <div class="day-number">Day 4</div>
-    </div>
-    <div class="day-content">
-      <div class="day-date">Tuesday, May 19</div>
-      <h3>Stuttgart &amp; Esslingen</h3>
-      <p class="day-subtitle">The state capital and Germany's finest half-timbered town, back to back.</p>
-      <div class="transport-badge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
-        MEX 12 / MEX 18 — 30–44 min to Stuttgart
+  <!-- Day 4: May 19 — Swipeable: Stuttgart OR Nuremberg -->
+  <div class="day-card-slider">
+    <div class="slider-label">Swipe to compare options for Day 4</div>
+    <div class="slider-track" id="day4-slider">
+
+      <!-- Option A: Stuttgart & Esslingen -->
+      <div class="day-card">
+        <div class="day-image">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/b3/StuttgartSchlossPlatz.JPG" alt="Stuttgart Schlossplatz" loading="lazy">
+          <div class="day-number">Day 4</div>
+          <div class="option-label">Option A</div>
+        </div>
+        <div class="day-content">
+          <div class="day-date">Tuesday, May 19</div>
+          <h3>Stuttgart &amp; Esslingen</h3>
+          <p class="day-subtitle">The state capital and Germany's finest half-timbered town, back to back.</p>
+          <div class="transport-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+            MEX 12 / MEX 18 — 30–44 min to Stuttgart
+          </div>
+          <ul class="highlights">
+            <li><strong>Mercedes-Benz Museum</strong> — 160 vehicles across 9 floors of automotive history</li>
+            <li><strong>Schlossplatz</strong> — sweeping palace square with the Neues Schloss</li>
+            <li><strong>Markthalle</strong> — stunning Art Nouveau market hall, great for lunch</li>
+            <li><strong>Esslingen am Neckar</strong> — stop on the way back; 200+ half-timbered houses (oldest row in Germany, 1328), hilltop castle, and the Rathaus astronomical clock</li>
+          </ul>
+        </div>
       </div>
-      <ul class="highlights">
-        <li><strong>Mercedes-Benz Museum</strong> — 160 vehicles across 9 floors of automotive history</li>
-        <li><strong>Schlossplatz</strong> — sweeping palace square with the Neues Schloss</li>
-        <li><strong>Markthalle</strong> — stunning Art Nouveau market hall, great for lunch</li>
-        <li><strong>Esslingen am Neckar</strong> — stop on the way back; 200+ half-timbered houses (oldest row in Germany, 1328), hilltop castle, and the Rathaus astronomical clock</li>
-      </ul>
+
+      <!-- Option B: Nuremberg -->
+      <div class="day-card">
+        <div class="day-image">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/N%C3%BCrnberger_Burg_im_Herbst_2013.jpg" alt="Nuremberg Kaiserburg" loading="lazy">
+          <div class="day-number">Day 4</div>
+          <div class="option-label">Option B</div>
+        </div>
+        <div class="day-content">
+          <div class="day-date">Tuesday, May 19</div>
+          <h3>Nuremberg</h3>
+          <p class="day-subtitle">Bavaria's medieval gem — imperial castle, bratwurst, and a sobering 20th-century history.</p>
+          <div class="transport-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 18h14M5 14h14"/><rect x="3" y="4" width="18" height="14" rx="2"/></svg>
+            MEX → Stuttgart, ICE → Nuremberg — ~2.5 hrs
+          </div>
+          <ul class="highlights">
+            <li><strong>Kaiserburg</strong> — Imperial Castle towering over the old town, with deep well and Sinwell Tower views</li>
+            <li><strong>Altstadt</strong> — beautifully rebuilt medieval old town with Hauptmarkt square and Schöner Brunnen fountain</li>
+            <li><strong>Nazi Party Rally Grounds</strong> — Documentation Centre and the massive unfinished Congress Hall</li>
+            <li><strong>Albrecht Dürer's House</strong> — the Renaissance master's home, now a museum</li>
+            <li><strong>Nuremberg bratwurst</strong> — the famous tiny grilled sausages, best at Bratwursthäusle</li>
+            <li><strong>Note:</strong> Long day trip (~2.5 hrs each way); leave early, return by evening</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="slider-controls">
+      <button class="slider-arrow" onclick="slideDay4(-1)">&#8592;</button>
+      <div class="slider-dots">
+        <div class="slider-dot active" onclick="slideDay4To(0)"></div>
+        <div class="slider-dot" onclick="slideDay4To(1)"></div>
+      </div>
+      <button class="slider-arrow" onclick="slideDay4(1)">&#8594;</button>
     </div>
   </div>
 
@@ -956,6 +1300,148 @@
     </div>
   </div>
 </div>
+
+<!-- Weather & Packing -->
+<div class="section-title">
+  <h2>Weather &amp; Packing</h2>
+  <p>May in southern Germany — warm days, cool evenings, and a good chance of rain.</p>
+</div>
+
+<div class="info-section">
+  <div class="info-grid">
+    <div class="info-panel">
+      <h4><span class="panel-icon">&#9788;</span> May Weather Averages</h4>
+      <div class="weather-grid">
+        <div class="weather-stat">
+          <div class="val">19°C / 66°F</div>
+          <div class="lbl">Daytime High</div>
+        </div>
+        <div class="weather-stat">
+          <div class="val">8°C / 46°F</div>
+          <div class="lbl">Nighttime Low</div>
+        </div>
+        <div class="weather-stat">
+          <div class="val">13 days</div>
+          <div class="lbl">Rain Days</div>
+        </div>
+        <div class="weather-stat">
+          <div class="val">15 hrs</div>
+          <div class="lbl">Daylight</div>
+        </div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-dim);margin-top:1rem;font-weight:300;">Rhine Valley is slightly warmer. Black Forest at elevation will be 5–8°C cooler — bring a layer for the B500.</p>
+    </div>
+    <div class="info-panel">
+      <h4><span class="panel-icon">&#9776;</span> Packing Checklist</h4>
+      <ul class="checklist">
+        <li>Light rain jacket / packable umbrella</li>
+        <li>Comfortable walking shoes</li>
+        <li>Warm layer (fleece / sweater)</li>
+        <li>Smart outfit for wedding</li>
+        <li>Sunglasses &amp; sunscreen</li>
+        <li>Day backpack</li>
+        <li>EU power adapter (Type C/F)</li>
+        <li>Reusable water bottle</li>
+        <li>Passport &amp; copies</li>
+        <li>Travel insurance docs</li>
+        <li>DB Navigator app (offline)</li>
+        <li>Google Translate (DE offline)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Useful Phrases & Quick Reference -->
+<div class="section-title">
+  <h2>Quick Reference</h2>
+  <p>Essentials, useful phrases, and booking links — all in one place.</p>
+</div>
+
+<div class="info-section">
+  <div class="info-grid">
+    <div class="info-panel">
+      <h4><span class="panel-icon">&#9742;</span> Emergency &amp; Essentials</h4>
+      <ul class="ref-list">
+        <li><strong>Emergency (fire/ambulance/police)</strong> <span class="ref-val">112</span></li>
+        <li><strong>Police (non-emergency)</strong> <span class="ref-val">110</span></li>
+        <li><strong>US Embassy Frankfurt</strong> <span class="ref-val">+49 69 7535 0</span></li>
+        <li><strong>Currency</strong> <span class="ref-val">Euro (€) — cards widely accepted</span></li>
+        <li><strong>Tipping</strong> <span class="ref-val">Round up or 5–10% at restaurants</span></li>
+        <li><strong>Tap water</strong> <span class="ref-val">Safe to drink everywhere</span></li>
+        <li><strong>Useful apps</strong> <span class="ref-val">DB Navigator, Google Maps, Google Translate</span></li>
+        <li><strong>Train tip</strong> <span class="ref-val">Validate BW-Tickets at the machine before boarding</span></li>
+      </ul>
+    </div>
+    <div class="info-panel">
+      <h4><span class="panel-icon">&#9998;</span> Useful German Phrases</h4>
+      <ul class="phrase-list">
+        <li><span class="phrase-de">Guten Tag</span> <span class="phrase-en">Hello / Good day</span></li>
+        <li><span class="phrase-de">Danke / Bitte</span> <span class="phrase-en">Thank you / Please</span></li>
+        <li><span class="phrase-de">Sprechen Sie Englisch?</span> <span class="phrase-en">Do you speak English?</span></li>
+        <li><span class="phrase-de">Wo ist der Bahnhof?</span> <span class="phrase-en">Where is the train station?</span></li>
+        <li><span class="phrase-de">Eine Fahrkarte nach…</span> <span class="phrase-en">A ticket to…</span></li>
+        <li><span class="phrase-de">Wann fährt der nächste Zug?</span> <span class="phrase-en">When is the next train?</span></li>
+        <li><span class="phrase-de">Die Rechnung, bitte</span> <span class="phrase-en">The check, please</span></li>
+        <li><span class="phrase-de">Ein Bier / Wein, bitte</span> <span class="phrase-en">A beer / wine, please</span></li>
+        <li><span class="phrase-de">Entschuldigung</span> <span class="phrase-en">Excuse me / Sorry</span></li>
+        <li><span class="phrase-de">Tschüss</span> <span class="phrase-en">Bye</span></li>
+      </ul>
+    </div>
+    <div class="info-panel">
+      <h4><span class="panel-icon">&#10132;</span> Booking Links</h4>
+      <div class="booking-links">
+        <a href="https://int.bahn.de/en" target="_blank" class="booking-btn">
+          <span>Deutsche Bahn — Train tickets &amp; schedules</span>
+          <span class="arrow">&#8594;</span>
+        </a>
+        <a href="https://www.sixt.com/car-rental/germany/stuttgart/stuttgart-central-train-station/" target="_blank" class="booking-btn">
+          <span>Sixt — Rental car at Stuttgart Hbf</span>
+          <span class="arrow">&#8594;</span>
+        </a>
+        <a href="https://www.europcar.com/en-us/places/car-rental-germany/stuttgart/stuttgart-railway-station" target="_blank" class="booking-btn">
+          <span>Europcar — Rental car at Stuttgart Hbf</span>
+          <span class="arrow">&#8594;</span>
+        </a>
+        <a href="https://www.k-d.com/en/product/regular-lines-on-the-rhine/" target="_blank" class="booking-btn">
+          <span>KD Rhine — Cruise tickets (200th anniversary!)</span>
+          <span class="arrow">&#8594;</span>
+        </a>
+        <a href="https://translate.google.com/?sl=en&tl=de" target="_blank" class="booking-btn">
+          <span>Google Translate — Download German offline</span>
+          <span class="arrow">&#8594;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Countdown Script -->
+<script>
+(function() {
+  const target = new Date('2026-05-16T10:00:00+02:00');
+  const el = document.getElementById('countdown');
+  function update() {
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      el.innerHTML = '<div class="countdown-past">The adventure has begun!</div>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    el.innerHTML = '<div class="countdown">' +
+      '<div class="countdown-unit"><div class="countdown-num">'+d+'</div><div class="countdown-label">Days</div></div>' +
+      '<div class="countdown-unit"><div class="countdown-num">'+h+'</div><div class="countdown-label">Hours</div></div>' +
+      '<div class="countdown-unit"><div class="countdown-num">'+m+'</div><div class="countdown-label">Min</div></div>' +
+      '<div class="countdown-unit"><div class="countdown-num">'+s+'</div><div class="countdown-label">Sec</div></div>' +
+      '</div>';
+  }
+  update();
+  setInterval(update, 1000);
+})();
+</script>
 
 <!-- Footer -->
 <footer>
